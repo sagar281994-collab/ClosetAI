@@ -35,12 +35,36 @@ export default function OutfitCard({ outfit, index }) {
       {outfit.missingItems && outfit.missingItems.length > 0 && (
         <div style={{ marginTop: '16px', padding: '12px', background: 'var(--accent-bg)', borderRadius: '8px' }}>
           <p style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--accent)', marginBottom: '6px' }}>
-            ✨ Could elevate this look:
+            ✨ Elevate this look & support us:
           </p>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-            {outfit.missingItems.map((item, i) => (
-              <span key={i} style={{ fontSize: '0.85rem', color: 'var(--accent)' }}>• {item}</span>
-            ))}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+            {outfit.missingItems.map((item, i) => {
+              const affiliateLink = `https://www.google.com/search?tbm=shop&q=${encodeURIComponent(item)}&affiliate=closetai`;
+              return (
+                <a 
+                  key={i} 
+                  href={affiliateLink} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  style={{ 
+                    fontSize: '0.8rem', 
+                    color: '#fff', 
+                    background: 'var(--accent)',
+                    padding: '5px 10px',
+                    borderRadius: '6px',
+                    textDecoration: 'none',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    transition: 'opacity 0.2s'
+                  }}
+                  onMouseOver={(e) => e.currentTarget.style.opacity = '0.8'}
+                  onMouseOut={(e) => e.currentTarget.style.opacity = '1'}
+                >
+                  🛒 Buy "{item}"
+                </a>
+              );
+            })}
           </div>
         </div>
       )}

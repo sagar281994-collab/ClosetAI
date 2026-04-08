@@ -9,10 +9,21 @@ export default function Results() {
   const [outfits, setOutfits] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [generationsToday, setGenerationsToday] = useState(0);
 
   useEffect(() => {
     const stored = localStorage.getItem('closet');
     if (stored) setCloset(JSON.parse(stored));
+    
+    // Check daily limit for freemium model
+    const dailyData = JSON.parse(localStorage.getItem('generationData') || '{"count": 0, "date": ""}');
+    const today = new Date().toDateString();
+    if (dailyData.date === today) {
+      setGenerationsToday(dailyData.count);
+    } else {
+      localStorage.setItem('generationData', JSON.stringify({ count: 0, date: today }));
+      setGenerationsToday(0);
+    }
   }, []);
 
   async function handleGenerate() {
@@ -20,11 +31,22 @@ export default function Results() {
       setError('Your closet is empty. Add some items first.');
       return;
     }
+
+    if (generationsToday >= 3) {
+      setError('Free tier limit reached (3/3 daily generations). Upgrade to Premium for unlimited styling for just $5/month! 💎');
+      return;
+    }
+
     setError('');
     setLoading(true);
     try {
       const result = await generateOutfits(closet, filters);
       setOutfits(result);
+
+      // Increment daily generation count
+      const newCount = generationsToday + 1;
+      setGenerationsToday(newCount);
+      localStorage.setItem('generationData', JSON.stringify({ count: newCount, date: new Date().toDateString() }));
     } catch (err) {
       setError(err.message);
     } finally {
