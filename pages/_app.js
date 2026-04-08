@@ -1,10 +1,15 @@
 import '../styles/globals.css';
 import DarkModeToggle from '../components/DarkModeToggle';
+import PaymentModal from '../components/PaymentModal';
 import Link from 'next/link';
+import { useState } from 'react';
 
 export default function App({ Component, pageProps }) {
+  const [showModal, setShowModal] = useState(false);
+
   return (
     <>
+      {showModal && <PaymentModal onClose={() => setShowModal(false)} />}
       <header className="page-header">
         <div className="container inner">
           <Link href="/" className="logo">👗 ClosetAI</Link>
@@ -13,7 +18,7 @@ export default function App({ Component, pageProps }) {
             <Link href="/results" style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>Outfits</Link>
             
             <button 
-              onClick={() => alert(`📊 REVENUE MODEL METRICS:\n\n1. Freemium Tier Limit: Hard-capped at 3 generation requests/day.\n\n2. Premium Conversion:\n   1,000 users × $5/month = $5,000/month recurring revenue.\n\n3. Affiliate Income:\n   Any missing item generates an affiliate eCommerce link. Clicks and conversions yield continuous extra income.`)}
+              onClick={() => setShowModal(true)}
               style={{
                 background: 'linear-gradient(90deg, #ff6b6b, #c06c84)',
                 color: 'white',

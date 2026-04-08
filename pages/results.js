@@ -32,7 +32,7 @@ export default function Results() {
       return;
     }
 
-    if (generationsToday >= 3) {
+    if (generationsToday >= 3 && localStorage.getItem('isPremium') !== 'true') {
       setError('Free tier limit reached (3/3 daily generations). Upgrade to Premium for unlimited styling for just $5/month! 💎');
       return;
     }
